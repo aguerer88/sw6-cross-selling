@@ -11,4 +11,8 @@ use Shopware\Core\Framework\Plugin\Context\UpdateContext;
 
 class CrossSellingProducts extends Plugin
 {
+    public function install(InstallContext $installContext): void
+    {
+        parent::install($installContext);
+    }
 }
