@@ -1,0 +1,51 @@
+{
+    "name": "cross-selling/cross-selling-products",
+    "description": "Ironshark Cross Selling Products",
+    "type": "shopware-platform-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "shopware/core": "~6.7.0"
+    },
+    "authors": [
+        {
+            "name": "Ahmet Gürer",
+            "email": "a.guerer88@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "extra": {
+        "shopware-plugin-class": "CrossSelling\\CrossSellingProducts",
+        "label": {
+            "de-DE": "CrossSelling Product",
+            "en-GB": "CrossSelling Product"
+        }
+    },
+    "require-dev": {
+        "slevomat/coding-standard": "^8.14",
+        "squizlabs/php_codesniffer": "^3.7"
+    },    
+    "autoload": {
+        "psr-4": {
+            "CrossSelling\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CrossSelling\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "apcu-autoloader": true,
+        "vendor-dir": ".build/vendor",
+        "bin-dir": ".build/bin",
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },    
+    "scripts": {
+        "phpcs": "@php ./.build/bin/phpcs --standard=.build/phpcs.xml --extensions=php --ignore=.build --report=full -n .",
+        "phpcbf": "@php ./.build/bin/phpcbf --standard=.build/phpcs.xml --extensions=php --ignore=.build ."
+    }
+}
