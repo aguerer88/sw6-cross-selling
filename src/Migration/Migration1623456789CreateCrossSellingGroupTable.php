@@ -15,31 +15,22 @@ class Migration1623456789CreateCrossSellingGroupTable extends MigrationStep
     {
         $connection->executeStatement(<<<SQL
 CREATE TABLE IF NOT EXISTS `cross_selling_product_group` (
-  `id` BINARY(16) NOT NULL,
-  `category_id` BINARY(16) NOT NULL,
-  `category_version_id` BINARY(16) NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
-  `product_stream_id` BINARY(16) NULL,
-  `product1_id` BINARY(16) NULL,
-  `product1_version_id` BINARY(16) NULL,
-  `product2_id` BINARY(16) NULL,
-  `product2_version_id` BINARY(16) NULL,
-  `product3_id` BINARY(16) NULL,
-  `product3_version_id` BINARY(16) NULL,
-  `position` INT(11) NOT NULL,
-  `created_at` DATETIME(3) NOT NULL,
-  `updated_at` DATETIME(3) NULL,
-  PRIMARY KEY (`id`),
-  CONSTRAINT `fk_cross_selling_group.category` FOREIGN KEY (`category_id`, `category_version_id`)
-    REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_cross_selling_group.product1` FOREIGN KEY (`product1_id`, `product1_version_id`)
-    REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_cross_selling_group.product2` FOREIGN KEY (`product2_id`, `product2_version_id`)
-    REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_cross_selling_group.product3` FOREIGN KEY (`product3_id`, `product3_version_id`)
-    REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_cross_selling_group.product_stream` FOREIGN KEY (`product_stream_id`)
-    REFERENCES `product_stream` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+    `id` BINARY(16) NOT NULL,
+    `category_id` BINARY(16) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `product_stream_id` BINARY(16) NULL,
+    `position` INT(11) NOT NULL DEFAULT 0,
+    `product_ids` JSON NULL,
+    `created_at` DATETIME(3) NOT NULL,
+    `updated_at` DATETIME(3) NULL,
+
+    PRIMARY KEY (`id`),
+
+    CONSTRAINT `fk_cross_selling_group.product_stream`
+        FOREIGN KEY (`product_stream_id`)
+        REFERENCES `product_stream` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+
+    CHECK (JSON_VALID(`product_ids`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SQL
         );

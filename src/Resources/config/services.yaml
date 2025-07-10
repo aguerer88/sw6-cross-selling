@@ -1,0 +1,11 @@
+services:
+  CrossSelling\Core\Content\CrossSellingGroup\CrossSellingGroupDefinition:
+    tags:
+      - { name: 'shopware.entity.definition' }
+
+  CrossSelling\Subscriber\ProductPageSubscriber:
+    arguments:
+      - '@cross_selling_product_group.repository'
+    tags:
+      - { name: kernel.event_subscriber }
+    public: true

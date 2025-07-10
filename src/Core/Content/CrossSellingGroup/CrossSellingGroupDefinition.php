@@ -9,6 +9,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\StringField;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\CreatedAtField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
 use Shopware\Core\Content\Category\CategoryDefinition;
@@ -31,6 +32,11 @@ class CrossSellingGroupDefinition extends EntityDefinition
         return CrossSellingGroupEntity::class;
     }
 
+    public function getCollectionClass(): string
+    {
+        return CrossSellingGroupCollection::class;
+    }
+
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
@@ -44,14 +50,7 @@ class CrossSellingGroupDefinition extends EntityDefinition
             (new FkField('product_stream_id', 'productStreamId', ProductStreamDefinition::class)),
             (new ManyToOneAssociationField('productStream', 'product_stream_id', ProductStreamDefinition::class, 'id', false)),
 
-            (new FkField('product1_id', 'product1Id', ProductDefinition::class)),
-            (new ManyToOneAssociationField('product1', 'product1_id', ProductDefinition::class, 'id', false)),
-
-            (new FkField('product2_id', 'product2Id', ProductDefinition::class)),
-            (new ManyToOneAssociationField('product2', 'product2_id', ProductDefinition::class, 'id', false)),
-
-            (new FkField('product3_id', 'product3Id', ProductDefinition::class)),
-            (new ManyToOneAssociationField('product3', 'product3_id', ProductDefinition::class, 'id', false)),
+            new JsonField('product_ids', 'productIds'),
 
             (new IntField('position', 'position'))->addFlags(new Required()),
 

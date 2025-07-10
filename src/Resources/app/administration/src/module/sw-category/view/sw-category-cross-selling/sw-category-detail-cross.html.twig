@@ -1,3 +1,58 @@
-<sw-card title="Cross Selling" :isLoading="isLoading">
-    <sw-button variant="primary" @click="addGroup">Neue Gruppe hinzufügen</sw-button>
-</sw-card>
+<template v-for="(group, index) in groups" :key="group.id">
+    <sw-card title="Neues Cross Selling" :hero="false" :isLoading="false" :large="false">
+        <template #headerRight>
+            <div class="sw-product-detail-cross-selling__context-button">
+                <sw-context-button>
+                    <sw-context-menu-item
+                        variant="danger"
+                        class="sw-product-cross_selling-context-item__delete-action"
+                        @click="removeGroup(index)"
+                    >
+                        delete
+                    </sw-context-menu-item>
+                </sw-context-button>
+            </div>
+        </template>
+        <sw-container columns="1fr 1fr" gap="0px 30px" align="start">
+            <mt-text-field
+                v-model="group.name"
+                name="sw-field--crossSelling-group"
+                :label="'Titel'"
+                required
+                :placeholder="'Gib einen namen ein'"
+            />
+            <mt-number-field
+                v-model="group.position"
+                number-type="int"
+                :min="1"
+                :max="2"
+                :label="'Position'"
+                :placeholder="'1'"
+            />
+            <sw-entity-single-select
+                id="sw-field--group-product-group"
+                v-model:value="group.productStreamId"
+                entity="product_stream"
+                class="sw-select-cross-selling__select-product-stream"
+                :label="'Dynamische Produktgruppe'"
+                :placeholder="'Produktgruppe auswählen'"
+            </sw-entity-single-select>      
+
+            <sw-entity-multi-id-select
+                label="Bis zu 3 Produkte"
+                :repository="productRepository"
+                :criteria="productCriteria"
+                v-model:value="group.productIds"
+                placeholder="Produkte auswählen"
+                :max-selection="3"
+                label-property="name">
+            </sw-entity-multi-id-select>
+
+            <sw-button @click="onSave">Konfiguration speichern</sw-button>                      
+        </sw-container>       
+    </sw-card>
+</template>
+<div style="display: flex; justify-content: center; margin-top: 20px;">
+    <sw-button @click="addGroup">Gruppe hinzufügen</sw-button>
+</div>
+

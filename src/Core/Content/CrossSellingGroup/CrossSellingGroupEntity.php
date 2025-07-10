@@ -4,17 +4,23 @@ namespace CrossSelling\Core\Content\CrossSellingGroup;
 
 use Shopware\Core\Framework\DataAbstractionLayer\Entity;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use Shopware\Core\Content\Category\CategoryEntity;
+use Shopware\Core\Content\ProductStream\ProductStreamEntity;
 
 class CrossSellingGroupEntity extends Entity
 {
     use EntityIdTrait;
 
     protected string $categoryId;
+    protected ?CategoryEntity $category = null;
+
     protected string $name;
-    protected ?string $productStreamId;
-    protected ?string $product1Id;
-    protected ?string $product2Id;
-    protected ?string $product3Id;
+
+    protected ?string $productStreamId = null;
+    protected ?ProductStreamEntity $productStream = null;
+
+    protected ?array $productIds = null;
+
     protected int $position;
 
     public function getCategoryId(): string
@@ -25,6 +31,16 @@ class CrossSellingGroupEntity extends Entity
     public function setCategoryId(string $categoryId): void
     {
         $this->categoryId = $categoryId;
+    }
+
+    public function getCategory(): ?CategoryEntity
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?CategoryEntity $category): void
+    {
+        $this->category = $category;
     }
 
     public function getName(): string
@@ -47,34 +63,24 @@ class CrossSellingGroupEntity extends Entity
         $this->productStreamId = $productStreamId;
     }
 
-    public function getProduct1Id(): ?string
+    public function getProductStream(): ?ProductStreamEntity
     {
-        return $this->product1Id;
+        return $this->productStream;
     }
 
-    public function setProduct1Id(?string $product1Id): void
+    public function setProductStream(?ProductStreamEntity $productStream): void
     {
-        $this->product1Id = $product1Id;
+        $this->productStream = $productStream;
     }
 
-    public function getProduct2Id(): ?string
+    public function getProductIds(): ?array
     {
-        return $this->product2Id;
+        return $this->productIds;
     }
 
-    public function setProduct2Id(?string $product2Id): void
+    public function setProductIds(?array $productIds): void
     {
-        $this->product2Id = $product2Id;
-    }
-
-    public function getProduct3Id(): ?string
-    {
-        return $this->product3Id;
-    }
-
-    public function setProduct3Id(?string $product3Id): void
-    {
-        $this->product3Id = $product3Id;
+        $this->productIds = $productIds;
     }
 
     public function getPosition(): int
