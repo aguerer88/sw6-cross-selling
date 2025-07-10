@@ -1,0 +1,21 @@
+{% if page.extensions.crossSellingGroups %}
+    {% set groups = page.extensions.crossSellingGroups.all ?? [] %}
+
+    {# Ausgabe für Position 1 (unter Produkt Media) #}
+    <div id="cross-selling-position">
+        <section class="cross-selling-group mt-5 mb-5">
+            <h3 class="cross-selling-group-title mb-4">{{ group.name }}</h3>
+            <div class="row cms-listing-row js-listing-wrapper" role="list">
+                {% for product in group.extensions.products.all|slice(0, 10) %}
+                    <div class="cms-listing-col col-6 col-sm-4 col-md-3 col-lg-3" role="listitem">
+                        {% sw_include '@Storefront/storefront/component/product/card/box.html.twig' with {
+                            product: product,
+                            layout: 'standard',
+                            displayMode: 'standard'
+                        } %}
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+{% endif %}

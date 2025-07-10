@@ -1,0 +1,14 @@
+{% sw_extends '@Storefront/storefront/block/cms-block-product-description-reviews.html.twig' %}
+
+{% block block_product_description_review %}
+    {{ parent() }}
+
+    {# Cross-Selling Gruppen Position 2 anzeigen #}
+    {% if page.extensions.crossSellingGroups is defined %}
+        {% for group in page.extensions.crossSellingGroups.all %}
+            {% if group.position == 2 %}
+                {% sw_include '@Storefront/storefront/cross-selling/cross-selling-group-position-2.html.twig' with { group: group } %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

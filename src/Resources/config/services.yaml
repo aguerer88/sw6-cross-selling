@@ -1,11 +1,19 @@
 services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
   CrossSelling\Core\Content\CrossSellingGroup\CrossSellingGroupDefinition:
     tags:
       - { name: 'shopware.entity.definition' }
 
   CrossSelling\Subscriber\ProductPageSubscriber:
     arguments:
-      - '@cross_selling_product_group.repository'
+      $categoryRepo: '@category.repository'
+      $crossSellingGroupRepo: '@cross_selling_product_group.repository'
+      $productRepo: '@product.repository'
+      $productStreamRepo: '@product_stream.repository' # ← das ist korrekt!
+      $productStreamBuilder: '@Shopware\Core\Content\ProductStream\Service\ProductStreamBuilder'
     tags:
       - { name: kernel.event_subscriber }
-    public: true

@@ -1,0 +1,14 @@
+{% sw_extends '@Storefront/storefront/block/cms-block-gallery-buybox.html.twig' %}
+
+{% block block_gallery_buybox %}
+    {{ parent() }}
+
+    {# Cross-Selling Gruppen Position 1 anzeigen #}
+    {% if page.extensions.crossSellingGroups is defined %}
+        {% for group in page.extensions.crossSellingGroups.all %}
+            {% if group.position == 1 %}
+                {% sw_include '@Storefront/storefront/cross-selling/cross-selling-group-position-1.html.twig' with { group: group } %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}
