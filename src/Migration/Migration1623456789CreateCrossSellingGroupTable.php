@@ -1,5 +1,5 @@
 <?php declare(strict_types=1);
-namespace CrossSelling\CrossSellingProducts\Migration;
+namespace CrossSelling\Migration;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Core\Framework\Migration\MigrationStep;
@@ -20,7 +20,6 @@ CREATE TABLE IF NOT EXISTS `cross_selling_product_group` (
   `category_version_id` BINARY(16) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
   `product_stream_id` BINARY(16) NULL,
-  `product_stream_version_id` BINARY(16) NULL,
   `product1_id` BINARY(16) NULL,
   `product1_version_id` BINARY(16) NULL,
   `product2_id` BINARY(16) NULL,
@@ -35,9 +34,12 @@ CREATE TABLE IF NOT EXISTS `cross_selling_product_group` (
     REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_cross_selling_group.product1` FOREIGN KEY (`product1_id`, `product1_version_id`)
     REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  -- (Fremdschlüssel für product2, product3 analog)
-  CONSTRAINT `fk_cross_selling_group.product_stream` FOREIGN KEY (`product_stream_id`, `product_stream_version_id`)
-    REFERENCES `product_stream` (`id`, `version_id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `fk_cross_selling_group.product2` FOREIGN KEY (`product2_id`, `product2_version_id`)
+    REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_cross_selling_group.product3` FOREIGN KEY (`product3_id`, `product3_version_id`)
+    REFERENCES `product` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_cross_selling_group.product_stream` FOREIGN KEY (`product_stream_id`)
+    REFERENCES `product_stream` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 SQL
         );

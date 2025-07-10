@@ -1,0 +1,23 @@
+{
+  "base": "/bundles/crosssellingproducts/administration/",
+  "entryPoints": {
+    "cross-selling-products": {
+      "css": [],
+      "dynamic": [],
+      "js": [
+        "/bundles/crosssellingproducts/administration/assets/cross-selling-products-CBQS6Odh.js"
+      ],
+      "legacy": false,
+      "preload": []
+    }
+  },
+  "legacy": false,
+  "metadatas": {},
+  "version": [
+    "7.1.0",
+    7,
+    1,
+    0
+  ],
+  "viteServer": null
+}

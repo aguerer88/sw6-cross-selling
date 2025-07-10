@@ -30,11 +30,6 @@
             "CrossSelling\\": "src/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "CrossSelling\\Tests\\": "tests/"
-        }
-    },
     "config": {
         "optimize-autoloader": true,
         "apcu-autoloader": true,

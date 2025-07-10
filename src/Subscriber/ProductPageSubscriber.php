@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace CrossSelling\Storefront\Subscriber;
+namespace CrossSelling\Subscriber;
 
 use Shopware\Storefront\Page\Product\ProductPageLoadedEvent;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
+use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -11,9 +11,9 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 
 class ProductPageSubscriber implements EventSubscriberInterface
 {
-    private EntityRepositoryInterface $crossSellingGroupRepository;
+    private EntityRepository $crossSellingGroupRepository;
 
-    public function __construct(EntityRepositoryInterface $crossSellingGroupRepository)
+    public function __construct(EntityRepository $crossSellingGroupRepository)
     {
         $this->crossSellingGroupRepository = $crossSellingGroupRepository;
     }

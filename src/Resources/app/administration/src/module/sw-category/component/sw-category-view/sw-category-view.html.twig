@@ -1,0 +1,11 @@
+{% block sw_category_view_tabs_seo %}
+
+    {% parent %}
+
+    <sw-tabs-item
+        class="sw-category-detail__tab-cross"
+        :route="{ name: 'sw.category.detail.cross', params: { id: category.id } }"
+        :title="Cross-Selling">
+        Cross Selling
+    </sw-tabs-item>
+{% endblock %}
