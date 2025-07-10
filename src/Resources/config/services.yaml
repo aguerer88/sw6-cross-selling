@@ -15,5 +15,6 @@ services:
       $productRepo: '@product.repository'
       $productStreamRepo: '@product_stream.repository' # ← das ist korrekt!
       $productStreamBuilder: '@Shopware\Core\Content\ProductStream\Service\ProductStreamBuilder'
+      $systemConfigService: '@Shopware\Core\System\SystemConfig\SystemConfigService'
     tags:
       - { name: kernel.event_subscriber }

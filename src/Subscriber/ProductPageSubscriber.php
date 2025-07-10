@@ -13,6 +13,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Struct\ArrayEntity;
+use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\Product\ProductPageLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -23,19 +24,22 @@ class ProductPageSubscriber implements EventSubscriberInterface
     private EntityRepository $productRepo;
     private EntityRepository $productStreamRepo;
     private ProductStreamBuilder $productStreamBuilder;
+    private SystemConfigService $systemConfigService;
 
     public function __construct(
         EntityRepository $categoryRepo,
         EntityRepository $crossSellingGroupRepo,
         EntityRepository $productRepo,
         EntityRepository $productStreamRepo,
-        ProductStreamBuilder $productStreamBuilder
+        ProductStreamBuilder $productStreamBuilder,
+        SystemConfigService $systemConfigService
     ) {
         $this->categoryRepo = $categoryRepo;
         $this->crossSellingGroupRepo = $crossSellingGroupRepo;
         $this->productRepo = $productRepo;
         $this->productStreamRepo = $productStreamRepo;
         $this->productStreamBuilder = $productStreamBuilder;
+        $this->systemConfigService = $systemConfigService;
     }
 
     public static function getSubscribedEvents(): array
@@ -58,10 +62,17 @@ class ProductPageSubscriber implements EventSubscriberInterface
         }
 
         $startCategoryId = end($categoryTree);
+        $showBelowImages = (bool) $this->systemConfigService->get('CrossSellingProducts.config.showBelowImages') ?? true;
+        $limit = (int) $this->systemConfigService->get('CrossSellingProducts.config.maxProductsPerStream') ?? 10;
 
         $groups = $this->loadInheritedGroups($startCategoryId, $context->getContext());
+        
         if (!empty($groups)) {
             $page->addExtension('crossSellingGroups', new ArrayEntity($groups));
+            $page->addExtension('crossSellingConfig', new ArrayEntity([
+                'showBelowImages' => $showBelowImages,
+                'maxProductsPerStream' => $limit
+            ]));
         }
     }
 

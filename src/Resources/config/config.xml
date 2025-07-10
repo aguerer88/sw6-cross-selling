@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>Globale Cross-Selling Konfiguration</title>
+        <title lang="de-DE">Globale Cross-Selling Konfiguration</title>
+
+        <input-field type="bool">
+            <name>showBelowImages</name>
+            <defaultValue>true</defaultValue>
+            <label>Cross-Selling unterhalb der Produktbilder anzeigen</label>
+            <label lang="de-DE">Cross-Selling unterhalb der Produktbilder anzeigen</label>
+        </input-field>
+
+        <input-field type="int">
+            <name>maxProductsPerStream</name>
+            <defaultValue>10</defaultValue>
+            <min>1</min>
+            <max>10</max>
+            <label>Anzahl der Produkte pro Gruppe</label>
+        </input-field>        
+    </card>
+</config>

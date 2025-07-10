@@ -2,7 +2,7 @@
 
 {% block block_product_description_review %}
     {{ parent() }}
-
+    
     {# Cross-Selling Gruppen Position 2 anzeigen #}
     {% if page.extensions.crossSellingGroups is defined %}
         {% for group in page.extensions.crossSellingGroups.all %}
