@@ -148,6 +148,15 @@ Shopware.Component.register('sw-category-detail-cross', {
 
         // Fügt eine neue Gruppe hinzu
         addGroup() {
+
+            if (this.groups.length >= 2) {
+                this.createNotificationWarning({
+                    title: 'Limit erreicht',
+                    message: 'Du kannst maximal 2 Gruppen hinzufügen.',
+                });
+                return;
+            }
+
             const newGroup = this.crossSellingGroupRepository.create(Shopware.Context.api);
             newGroup.categoryId = this.categoryId;
             newGroup.position = this.groups.length + 1;

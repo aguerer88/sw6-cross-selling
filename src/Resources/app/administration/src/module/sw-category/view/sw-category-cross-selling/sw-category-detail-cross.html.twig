@@ -72,6 +72,11 @@
 </template>
 
 <div style="display: flex; justify-content: center; margin-top: 20px;">
-    <sw-button @click="addGroup" :disabled="isInherited">Gruppe hinzufügen</sw-button>
+    <sw-button
+        @click="addGroup"
+        :disabled="isInherited || groups.length >= 2"
+    >
+        Gruppe hinzufügen
+    </sw-button>
 </div>
 
