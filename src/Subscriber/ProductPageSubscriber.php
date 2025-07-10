@@ -117,11 +117,16 @@ class ProductPageSubscriber implements EventSubscriberInterface
                             $streamCriteria = new Criteria();
                             $streamCriteria->addFilter(...$filters);
                             $streamCriteria->addFilter(new EqualsFilter('active', true));
+                            $streamCriteria->addSorting(new FieldSorting('id', FieldSorting::ASCENDING, true));
                             $streamCriteria->addAssociation('cover');
-                            $streamCriteria->setLimit(10);
+                            $streamCriteria->setLimit(50);
 
                             $streamProducts = $this->productRepo->search($streamCriteria, $context)->getEntities();
-                            $products = array_merge($products, $streamProducts->getElements());
+
+                            $streamProductsArray = array_values($streamProducts->getElements());
+                            shuffle($streamProductsArray);
+
+                            $products = array_merge($products, $streamProductsArray);
                         }
                     }
 
