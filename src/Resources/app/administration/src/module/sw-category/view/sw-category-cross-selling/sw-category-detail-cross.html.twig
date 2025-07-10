@@ -1,3 +1,17 @@
+<div v-if="isInherited && hasParentCategory" class="sw-cross-selling-inherited-notice">
+    Konfiguration wird von einer übergeordneten Kategorie geerbt.
+    <sw-button @click="breakInheritance" variant="primary" size="small">
+        Vererbung aufheben und bearbeiten
+    </sw-button>
+</div>
+
+<div v-if="!isInherited && isOverridingInheritedConfig" class="sw-cross-selling-inherited-notice">
+    Es besteht eine übergeordnete Konfiguration
+    <sw-button @click="restoreInheritance" class="button-yellow" size="small">
+        Vererbung wiederherstellen
+    </sw-button>
+</div>
+
 <template v-for="(group, index) in groups" :key="group.id">
     <sw-card title="Neues Cross Selling" :hero="false" :isLoading="false" :large="false">
         <template #headerRight>
@@ -7,12 +21,14 @@
                         variant="danger"
                         class="sw-product-cross_selling-context-item__delete-action"
                         @click="removeGroup(index)"
+                        :disabled="isInherited"
                     >
-                        delete
+                    delete
                     </sw-context-menu-item>
                 </sw-context-button>
             </div>
         </template>
+
         <sw-container columns="1fr 1fr" gap="0px 30px" align="start">
             <mt-text-field
                 v-model="group.name"
@@ -20,6 +36,7 @@
                 :label="'Titel'"
                 required
                 :placeholder="'Gib einen namen ein'"
+                :disabled="isInherited"
             />
             <mt-number-field
                 v-model="group.position"
@@ -28,6 +45,7 @@
                 :max="2"
                 :label="'Position'"
                 :placeholder="'1'"
+                :disabled="isInherited"
             />
             <sw-entity-single-select
                 id="sw-field--group-product-group"
@@ -36,8 +54,8 @@
                 class="sw-select-cross-selling__select-product-stream"
                 :label="'Dynamische Produktgruppe'"
                 :placeholder="'Produktgruppe auswählen'"
-            </sw-entity-single-select>      
-
+                :disabled="isInherited"
+            />
             <sw-entity-multi-id-select
                 label="Bis zu 3 Produkte"
                 :repository="productRepository"
@@ -45,14 +63,15 @@
                 v-model:value="group.productIds"
                 placeholder="Produkte auswählen"
                 :max-selection="3"
-                label-property="name">
-            </sw-entity-multi-id-select>
-
-            <sw-button @click="onSave">Konfiguration speichern</sw-button>                      
-        </sw-container>       
+                label-property="name"
+                :disabled="isInherited"
+            />
+            <sw-button @click="onSave" variant="primary" :disabled="isInherited">Konfiguration speichern</sw-button>
+        </sw-container>
     </sw-card>
 </template>
+
 <div style="display: flex; justify-content: center; margin-top: 20px;">
-    <sw-button @click="addGroup">Gruppe hinzufügen</sw-button>
+    <sw-button @click="addGroup" :disabled="isInherited">Gruppe hinzufügen</sw-button>
 </div>
 

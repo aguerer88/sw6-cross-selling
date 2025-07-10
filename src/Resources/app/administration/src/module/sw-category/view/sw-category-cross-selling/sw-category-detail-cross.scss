@@ -1,0 +1,29 @@
+.sw-cross-selling-inherited-notice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 1rem;
+    font-style: italic;
+    color: #888;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+
+    sw-button {
+        margin-left: 0;
+        font-style: normal;
+    }
+
+    .button-yellow {
+        background-color: gold;
+        color: #52667a;
+        border-color: gold;
+        font-style: normal;
+    
+        &:hover {
+            background-color: gold;
+            border-color: gold;            
+            color: #000 !important;
+        }
+    }
+}

@@ -2,10 +2,12 @@
   "base": "/bundles/crosssellingproducts/administration/",
   "entryPoints": {
     "cross-selling-products": {
-      "css": [],
+      "css": [
+        "/bundles/crosssellingproducts/administration/assets/cross-selling-products-f9al-XKm.css"
+      ],
       "dynamic": [],
       "js": [
-        "/bundles/crosssellingproducts/administration/assets/cross-selling-products-DuPqoFHw.js"
+        "/bundles/crosssellingproducts/administration/assets/cross-selling-products-BM6QFBti.js"
       ],
       "legacy": false,
       "preload": []

@@ -1,8 +1,11 @@
 {
   "main.js": {
-    "file": "assets/cross-selling-products-DuPqoFHw.js",
+    "file": "assets/cross-selling-products-BM6QFBti.js",
     "name": "cross-selling-products",
     "src": "main.js",
-    "isEntry": true
+    "isEntry": true,
+    "css": [
+      "assets/cross-selling-products-f9al-XKm.css"
+    ]
   }
 }

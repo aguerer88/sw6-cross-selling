@@ -1,0 +1,10 @@
+### General ###
+src/Resources/public/
+
+### CI ###
+.build/bin/
+.build/vendor/
+.build/web/
+.build/logs/
+.build/coverage/
+.build/pdepend/
