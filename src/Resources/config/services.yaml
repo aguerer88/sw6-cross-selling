@@ -12,9 +12,9 @@ services:
     arguments:
       $categoryRepo: '@category.repository'
       $crossSellingGroupRepo: '@cross_selling_product_group.repository'
-      $productRepo: '@product.repository'
-      $productStreamRepo: '@product_stream.repository' # ← das ist korrekt!
+      $productStreamRepo: '@product_stream.repository'
       $productStreamBuilder: '@Shopware\Core\Content\ProductStream\Service\ProductStreamBuilder'
+      $productListingLoader: '@Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingLoader'
       $systemConfigService: '@Shopware\Core\System\SystemConfig\SystemConfigService'
     tags:
       - { name: kernel.event_subscriber }

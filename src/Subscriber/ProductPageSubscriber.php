@@ -4,7 +4,7 @@ namespace CrossSelling\Subscriber;
 
 use CrossSelling\Core\Content\CrossSellingGroup\CrossSellingGroupEntity;
 use Shopware\Core\Content\Category\CategoryEntity;
-use Shopware\Core\Content\Product\ProductEntity;
+use Shopware\Core\Content\Product\SalesChannel\Listing\ProductListingLoader;
 use Shopware\Core\Content\ProductStream\ProductStreamEntity;
 use Shopware\Core\Content\ProductStream\Service\ProductStreamBuilder;
 use Shopware\Core\Framework\Context;
@@ -15,30 +15,31 @@ use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\Framework\Struct\ArrayEntity;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
 use Shopware\Storefront\Page\Product\ProductPageLoadedEvent;
+use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ProductPageSubscriber implements EventSubscriberInterface
 {
     private EntityRepository $categoryRepo;
     private EntityRepository $crossSellingGroupRepo;
-    private EntityRepository $productRepo;
     private EntityRepository $productStreamRepo;
     private ProductStreamBuilder $productStreamBuilder;
+    private ProductListingLoader $productListingLoader;
     private SystemConfigService $systemConfigService;
 
     public function __construct(
         EntityRepository $categoryRepo,
         EntityRepository $crossSellingGroupRepo,
-        EntityRepository $productRepo,
         EntityRepository $productStreamRepo,
         ProductStreamBuilder $productStreamBuilder,
+        ProductListingLoader $productListingLoader,
         SystemConfigService $systemConfigService
     ) {
         $this->categoryRepo = $categoryRepo;
         $this->crossSellingGroupRepo = $crossSellingGroupRepo;
-        $this->productRepo = $productRepo;
         $this->productStreamRepo = $productStreamRepo;
         $this->productStreamBuilder = $productStreamBuilder;
+        $this->productListingLoader = $productListingLoader;
         $this->systemConfigService = $systemConfigService;
     }
 
@@ -53,7 +54,7 @@ class ProductPageSubscriber implements EventSubscriberInterface
     {
         $page = $event->getPage();
         $product = $page->getProduct();
-        $context = $event->getSalesChannelContext();
+        $salesChannelContext = $event->getSalesChannelContext();
 
         $categoryTree = $product->getCategoryTree();
 
@@ -65,7 +66,7 @@ class ProductPageSubscriber implements EventSubscriberInterface
         $showBelowImages = (bool) $this->systemConfigService->get('CrossSellingProducts.config.showBelowImages') ?? true;
         $limit = (int) $this->systemConfigService->get('CrossSellingProducts.config.maxProductsPerStream') ?? 10;
 
-        $groups = $this->loadInheritedGroups($startCategoryId, $context->getContext());
+        $groups = $this->loadInheritedGroups($startCategoryId, $salesChannelContext);
         
         if (!empty($groups)) {
             $page->addExtension('crossSellingGroups', new ArrayEntity($groups));
@@ -76,8 +77,10 @@ class ProductPageSubscriber implements EventSubscriberInterface
         }
     }
 
-    private function loadInheritedGroups(string $categoryId, Context $context): array
+    private function loadInheritedGroups(string $categoryId, SalesChannelContext $salesChannelContext): array
     {
+        $context = $salesChannelContext->getContext();
+
         while ($categoryId) {
             $criteria = new Criteria();
             $criteria->addFilter(new EqualsFilter('categoryId', $categoryId));
@@ -97,9 +100,11 @@ class ProductPageSubscriber implements EventSubscriberInterface
                         $productCriteria = new Criteria($productIds);
                         $productCriteria->addFilter(new EqualsFilter('active', true));
                         $productCriteria->addAssociation('cover');
+                        $productCriteria->setLimit(50);
 
-                        $manualProducts = $this->productRepo->search($productCriteria, $context)->getEntities();
-                        $products = array_merge($products, $manualProducts->getElements());
+                        $manualProductsResult = $this->productListingLoader->load($productCriteria, $salesChannelContext);
+                        $manualProducts = $manualProductsResult->getEntities()->getElements();
+                        $products = array_merge($products, $manualProducts);
                     }
 
                     // Produkte aus ProductStream laden (dynamisch)
@@ -121,12 +126,12 @@ class ProductPageSubscriber implements EventSubscriberInterface
                             $streamCriteria->addAssociation('cover');
                             $streamCriteria->setLimit(50);
 
-                            $streamProducts = $this->productRepo->search($streamCriteria, $context)->getEntities();
+                            $streamProductsResult = $this->productListingLoader->load($streamCriteria, $salesChannelContext);
+                            $streamProducts = $streamProductsResult->getEntities()->getElements();
 
-                            $streamProductsArray = array_values($streamProducts->getElements());
-                            shuffle($streamProductsArray);
+                            shuffle($streamProducts);
 
-                            $products = array_merge($products, $streamProductsArray);
+                            $products = array_merge($products, $streamProducts);
                         }
                     }
 
@@ -135,10 +140,6 @@ class ProductPageSubscriber implements EventSubscriberInterface
                     $productIdsMap = [];
                     
                     foreach ($products as $product) {
-                        if (!$product instanceof ProductEntity) {
-                            continue;
-                        }
-
                         $id = $product->getId();
                         if (!isset($productIdsMap[$id])) {
                             $productIdsMap[$id] = true;
@@ -168,5 +169,4 @@ class ProductPageSubscriber implements EventSubscriberInterface
 
         return [];
     }
-
 }

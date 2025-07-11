@@ -3,7 +3,6 @@
     {% set groupConfig = page.extensions.crossSellingConfig.all ?? [] %}
 
     {% set maxCount = groupConfig.maxProductsPerStream ?? 10 %}
-    
     {# Ausgabe für Position 1 (unter Produkt Media, wenn in Konfiguration aktiv) #}
     {% if groupConfig.showBelowImages %}
         <div id="cross-selling-position">
